@@ -261,9 +261,9 @@ final static class OneDimension<T> implements Array<T> {
         subarray (
             arr,
             res -> list.add(
-                new OneDimension<>(res).iterate(start, accum, comb)));
+                Array.of(res).iterate(start, accum, comb)));
         
-        return new OneDimension<R>((R[]) list.toArray());
+        return Array.of((R[]) list.toArray());
     }
     
     
@@ -335,9 +335,9 @@ final static class OneDimension<T> implements Array<T> {
             arr.length, 
             arr, 
             newArray(arr), 
-            res -> lst.add(new OneDimension<>(res)
+            res -> lst.add(Array.of(res)
                     .iterate(start, accum, comb)));                       
-        return new OneDimension((T [])lst.toArray());
+        return Array.of((T [])lst.toArray());
     }
     
     private T[] newArray(final T[] arr) {
