@@ -111,7 +111,7 @@ interface Recurrence <I, R> {
         final Recurrence<I, R> withBaseCases = 
         (i, self) -> base.f(i).orElseGet(() -> recur.f(i, self));
 
-         return base.f(input).orElseGet(() -> withBaseCases.f (input, withBaseCases));
+         return withBaseCases.f (input, withBaseCases).get();
     }
 }
 
