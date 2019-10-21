@@ -137,9 +137,9 @@ System.out.printf ("coin change for %d using denominations %s = %s",
 
 The above logic is very clear in expressing what we wanted to do to solve this coin-change problem. The recurrence step specifies clearly that the total number of ways to get change for sum 's' using denominations denom[] is sum of the total number of ways in which the ith denomination was excluded and included. When denomination is included, the sum is subtracted by the denomination value in the recurrence. The recurrence cases are followed by the base cases. The base cases are self explanatory. 
 
-This abstraction helps concentrate only on the recurrence logic needed to solve the problem rather than concentrating on the boilerplate code needed to implement the recurrence.
+This abstraction helps consumers to concentrate only on the recurrence logic needed to solve the problem rather than on the boilerplate code needed to implement the recurrence itself.
 
-There is one issue with the above code. It computes the same sub-problems repeatedly. Efficient algorithm is to memoize the result and re-use it. Lets see how we can solve the memoization without introducing any clutter.
+There is one issue with the above code. It computes the same sub-problems repeatedly. Efficient algorithm is to memoize the result of sub problems and re-use it. Lets see how we can solve the memoization without introducing any clutter.
 
 ```java
 
