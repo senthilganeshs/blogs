@@ -4,7 +4,7 @@ With functional wave hitting the programming languages, every language is adopti
 
 CoffeeShop has a menu of different varieties of coffee. There is fixed limit of servings and price for each item. Customers can order coffee and if payment is successful, the inventory and credits for customer is updated.
 
-In Functional Code, there is no notion of Object. So we are going to follow below conventions in this blog post
+In Functional programming, there is no notion of Object. So we are going to follow below conventions in this blog post
 
 Class will be used to represent state and all states are immutable. Interfaces are used as namespace for functions for clarity. When a datatype has different constructors (this constructor is very different from the one we see in object oriented code) we use interface for substitution. 
 
@@ -47,7 +47,7 @@ class Credit {
 
 Item represents a menu in the Coffee Shop, PaidItem and UnPaidItem represents the items for which payment was successful and unsuccessful res.., and Credit represents the balance amount which can be used for payment by customer.
 
-These states are good enough at this moment. Before we implement our use-case, lets get our basics right to proceed.
+These states are good enough at this moment. Before we implement our use-case, lets get our basics right.
 
 We are going to see fold function which is used to implement almost all API's in this blog post. fold is similar to iterate method we have seen in this  [post](https://senthilganesh.hashnode.dev/array-operations-and-recurrence-in-object-oriented-programming-ck1z3xiop00w19ss1b4kj431n) 
 
@@ -94,14 +94,14 @@ List<T> filter (final Predicate <T> pred, final List<T> list) {
 }
 
 ```
-We can see from the above examples that the fold function really provides only the mechanism to iterate the list. The logic which should go within the iteration is represented by the "BiFunction<R,T,R> fn" and "R seed" parameters. Using just these two parameters we can inject any logic within the iteration. 
+We can see from the above examples that the fold function provides only the mechanism to iterate the list. The logic which should go within the iteration is specified by the "BiFunction<R,T,R> fn" and "R seed" parameters. Using just these two parameters we can inject any logic within the iteration. 
 
 Thats enough functional programming 101 to get through the rest of the blog.
 
 Lets split our usecase of ordering coffee into four highlevel API's
 - **order **- specify the item and quantity to place an order. It involves reducing the servings available in the store by the specified quantity.
 - **bill **- generate bill for the above order.
-- **pay  **- pay for the ordered item(s) by reducing the balance from the credit.
+- **pay  **- pay for the ordered item(s) by reducing the amount from the credit.
 - **shelve **- addup the servings deducted for the unpaid items. 
 
 ```java
@@ -285,7 +285,7 @@ foldl method folds the list starting from left to right. It can be defined for o
 fold function is same as the iterate function we saw in my earlier  [post](https://senthilganesh.hashnode.dev/array-operations-and-recurrence-in-object-oriented-programming-ck1z3xiop00w19ss1b4kj431n) . The difference between functional and object implementation is that in Object implementation, the Array type encapsulate the array values and expose the iterate method as behavior of the object.
 
 
-Lets see the either datatype which is again used in this  [post](https://senthilganesh.hashnode.dev/exception-handling-object-oriented-way-cjzlbrzw3000wwks1n2909li1). Again the difference between functional and object styles is same as previous explanation.
+Lets see the either datatype which is again used in this  [post](https://senthilganesh.hashnode.dev/exception-handling-object-oriented-way-cjzlbrzw3000wwks1n2909li1).
 
 ```java
 interface Either<A, B> {
@@ -327,7 +327,7 @@ interface Either<A, B> {
 
 ```
 
-And we want to support similar operations we supported for List.
+Let's implement the same APIs for Either type as well
 
 ```java
 interface EitherOps {
@@ -356,7 +356,7 @@ interface EitherOps {
 }
 ``` 
 
-Without further delay we will see the implementation of Maybe and Tuple datatypes as well.
+Below are the APIs written for Maybe and Tuple data types.
 
 ```java
 interface Maybe<T> {
