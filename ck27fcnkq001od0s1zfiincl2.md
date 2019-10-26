@@ -563,9 +563,9 @@ We call IOOps.readString() to read the item name. This method can return another
 
 We first called CoffeeShop.order specifying the store, item name and quantity. This call returns the ordered item and updated store in a tuple. Now we need to bill the items ordered. For billing we will convert the billed item values into functions which takes Credit and returns tuple of Credit and Either paid or unpaid items.
 
-When we have the Credit object we now need to apply the object to list of functions and convert to list of values. (see afterPayment).
+When we have the Credit object we can apply it to list of functions and convert functions to list of values. (see afterPayment).
 
-We need to extract the paid and unpaid items and the store value from this result. 
+We then extract the paid and unpaid items and the store value from this result. 
 
 And finally after extracting we are printing the values using IOOps.print() function.
 
@@ -573,7 +573,7 @@ If we remove the last .unsafeIO() call in the expression and execute the code we
 
 Now if we look at the main method, the code is very verbose. Its because JAVA language is very verbose for functional programming and more than that it lacks the generalization capabilities to avoid code repetition. The same code written in functional languages like haskell would be much more concise and clear. 
 
-There are many good things about this code, The fold method which fuels most of the functional APIs. It can be used in object oriented programming as well for iteration. Any imperative code involving for loops on collections can be represented using fold operation. 
+One of the good things about this code is the fold method which fuels most of the functional APIs. It can be used in object oriented programming as well for iteration. Any imperative code involving for loops on collections can be represented using fold operation. 
 
 JAVA streams has reduce API which is nothing but a fold method. Any imperative code involving for-loop on collections can be refactored using this reduce method.
 For Example the order function we saw earlier in this blog can be written using reduce API of stream as follows:
