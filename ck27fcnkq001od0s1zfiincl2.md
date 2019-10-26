@@ -127,7 +127,7 @@ interface CoffeeShop {
 }
 ```
 
-We order an item by specifying the name and qty. If the item is present in the store and the qty is less than the available servings, then order can be made. The order returns tuple of List of items ordered and list of items in the inventory (after detecting the ordered quantity). This is needed since functional program is referentially transparent which means if we execute the same method with same parameters again and again we should get the same result always.
+We order an item by specifying the name and qty. If the item is present in the store and the qty is less than the available servings, then order can be made. The order returns tuple of List of items ordered and list of items in the inventory (after deducting the ordered quantity). This is needed since functional program is referentially transparent which means if we execute the same method with same parameters again and again we should get the same result always.
 
 We have made an order, now we need to bill the items. Lets write our bill method ..
 
