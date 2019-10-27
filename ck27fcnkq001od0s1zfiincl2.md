@@ -501,7 +501,7 @@ interface IOOps {
 ```
 Lets consider the readString method. The method instead of returning the value read from console, returns the IO<String> object which reads a string value from the console in its unsafeIO() method. The call to unsafeIO() to retrieve the value can be postponed since the flatMap() method provided for IO<T> object can provide the value and take the logic which depends on the read value.
 
-How this helps to achieve referential transparency.?  Call to read() method returns a value which is same for every invocation with no side-effects. Any code which depends on the input string can be injested via the IOOps.flatMap() method. Unless the unsafeIO method is called on the IO<T> object, nothing gets executed. 
+How this helps to achieve referential transparency.?  Call to read() method returns a value which is same for every invocation with no side-effects. Any code which depends on the input string can be ingested via the IOOps.flatMap() method. Unless the unsafeIO method is called on the IO<T> object, nothing gets executed. 
 
 The method unsafeIO is impure function but this needs to be invoked only once in the main method. Excluding this invocation, rest of the code is pure.
 
@@ -557,19 +557,15 @@ public static void main(String[] args) {
 }
 ```
 
-We wanted to print the "Welcome " message to the console and indicate user to enter the name and quantity. IOOps.print() returns IO<Void> object. Now the result of this object is not of importance, but we can return another IO object within the flatMap() invocation of IO<Void>.
+We need to print one message to the console and read two inputs (name and quantity) from the console. These operations are side-effects but thanks to IO<T> we can return IO<String> , IO<Integer> and IO<Void> for reading string and integer and writing string to console res.., These objects won't perform the side-effect (reading / writing) untill the unsafeIO method is called on them. 
 
-We call IOOps.readString() to read the item name. This method can return another IO<Integer> by calling IOOps.readInt(). Now we have both the inputs from the console, name and quantity. The rest of the functions which depends on name and quantity to place the order can now be injested to the flatMap method.
+Since we can compose the code using the flatMap () abstraction, we can ingest the code which depends on these inputs to the inner most flatMap method.
 
-We first called CoffeeShop.order specifying the store, item name and quantity. This call returns the ordered item and updated store in a tuple. Now we need to bill the items ordered. For billing we will convert the billed item values into functions which takes Credit and returns tuple of Credit and Either paid or unpaid items.
+The call to unsafeIO() needs to be called only once and all the effects are applied in the order in which the code was composed.
 
-When we have the Credit object we can apply it to list of functions and convert functions to list of values. (see afterPayment).
+Now we call the method order with the inputs specified by user and get the ordered items. Next by mapping each ordered item using bill method, we get list of functions taking credit returning tuple of updated credit and either paid or unpaid item.
 
-We then extract the paid and unpaid items and the store value from this result. 
-
-And finally after extracting we are printing the values using IOOps.print() function.
-
-If we remove the last .unsafeIO() call in the expression and execute the code we can see that there will be no output generated.
+We need to apply the functions to credit object and get the results in another list. Now we need to extract the paid and unpaid items and print them using IOOps.print() function.
 
 Now if we look at the main method, the code is very verbose. Its because JAVA language is very verbose for functional programming and more than that it lacks the generalization capabilities to avoid code repetition. The same code written in functional languages like haskell would be much more concise and clear. 
 
