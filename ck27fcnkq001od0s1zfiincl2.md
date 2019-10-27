@@ -565,7 +565,7 @@ The call to unsafeIO() needs to be called only once and all the effects are appl
 
 Now we call the method order with the inputs specified by user and get the ordered items. Next by mapping each ordered item using bill method, we get list of functions taking credit returning tuple of updated credit and either paid or unpaid item.
 
-We need to apply the functions to credit object and get the results in another list. Now we need to extract the paid and unpaid items and print them using IOOps.print() function.
+We need to apply the functions to credit object and get the results in another list. Now we need to extract the paid and unpaid items. For all unpaid items, we need to call shelve to return it back to the store. The output can be printed to console using IOOps.print() function.
 
 Now if we look at the main method, the code is very verbose. Its because JAVA language is very verbose for functional programming and more than that it lacks the generalization capabilities to avoid code repetition. The same code written in functional languages like haskell would be much more concise and clear. 
 
