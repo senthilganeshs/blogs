@@ -258,7 +258,7 @@ interface ListOps {
     }
     
     static <T> List<T> concat (final List<T> left, final  List<T> right) {
-        return foldl ((ts, t) -> List.cons(t, ts), right, left);
+        return foldl ((ts, t) -> List.cons(t, ts), left, right);
     }
     
     static <T, R> List<R> flatMap (final Function<T, List<R>> fn, final List<T> lst) {
@@ -499,7 +499,7 @@ interface IOOps {
 }
 
 ```
-Lets consider the readString method. The method instead of returning the value read from console, returns the IO<String> object which reads a string value from the console in its unsafeIO() method. The call to unsafeIO() to retrieve the value can be postponed since the flatMap() method provided for IO<T> object can provide the value and take the logic which depends on the read value.
+Lets consider the readString method. The method instead of returning the value read from console, returns the IO<String> object which reads a string value from the console in its unsafeIO() method. The call to unsafeIO() to retrieve the value can be postponed since the flatMap() method provided for IO<T> object can take the logic which depends on the value to be read.
 
 How this helps to achieve referential transparency.?  Call to read() method returns a value which is same for every invocation with no side-effects. Any code which depends on the input string can be ingested via the IOOps.flatMap() method. Unless the unsafeIO method is called on the IO<T> object, nothing gets executed. 
 
