@@ -636,4 +636,12 @@ We can understand the code very easily by looking at the object interaction with
 
 Functional programming is easier in languages where First Class Functions, TypeClass parameterization, Lazy evaluation, pattern matching, syntactic sugar for chaining map and flatMap APIs (Example Haskell do Notation, for comprehension in scala), Higher kinded types and many other functional features are present. In all other languages (like CPP and JAVA) its just an overkill.
 
+Pure object oriented code is both concise and easy to understand and any complexity with respect to state mutation is confined within the premise of an object (Thanks to encapsulation). 
+
+In this post we might have observed that functional programming revolves around values. There is no concept of encapsulation. They depend on pure functions and values instead of dealing with variables and state mutation to solve the problem.
+
+Object oriented programming confine the variables and effects within the premise of an object whereas functional programming eliminates them (refer IOOps). Both address the complexity due to variables and effects but follows different approach. 
+
+Intermixing both the styles in single application is an abomination and it will violate the principles on one paradigm if we choose another. In this post we broke encapsulation in every class we have defined to adopt functional style. Pure object oriented code doesn’t return values and functional programming is all about coding around values.
+
 If anyone has any comments about the blog contents, please feel free to comment below.
