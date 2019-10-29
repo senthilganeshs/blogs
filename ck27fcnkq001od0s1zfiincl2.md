@@ -1,18 +1,19 @@
 ## Functional Programming in Java
 
-With functional wave hitting the programming languages, every language is adopting some new constructs to support functional style programming. But is it enough?. We are going to find out by writing functional code in java for a simple CofeeShop Application.
+With functional wave hitting every programming language across different paradigms, every language is adopting some new constructs to support functional style programming. But is it enough?. Do we need to write functional code to ensure correctness and clarity? We are going to find out by writing functional code in java for a simple CofeeShop Application.
 
-CoffeeShop has a menu of different varieties of coffee. There is fixed limit of servings and price for each item. Customers can order coffee and if payment is successful, the inventory and credits for customer is updated.
+CoffeeShop has a menu of different varieties of coffee. There is fixed limit of servings and price for each item. Customers can order coffee and if payment is successful, the inventory and credits for customer is updated. For unsuccessful payment the items are shelved back to the store.
 
 In Functional programming, there is no notion of Object. So we are going to follow below conventions in this blog post
 
-Class will be used to represent state and all states are immutable. Interfaces are used as namespace for functions for clarity. When a datatype has different constructors (this constructor is very different from the one we see in object oriented code) we use interface for substitution. 
+# Class will be used to represent state and all states are immutable. 
+# Interfaces are used as namespace for functions for clarity. 
+# When a datatype has different constructors (this constructor is very different from the one we see in object oriented code) we use interface for substitution. 
+# All functions should be referentially transparent. Referentially transparent functions are ones which doesn't have side-effect and returns the same result for given inputs when involved any number of times.
 
-All functions should be referentially transparent even the ones which has side-effects such as mutating the state or reading or printing to the console. Referentially transparent functions are ones which doesn't have side-effect and returns the same result for given inputs when involved any number of times.
+With the above guidelines let’s start writing functional code in JAVA
 
-This is in-contrast to what we mentioned in this  [post](https://senthilganesh.hashnode.dev/effects-transformations-and-values-ck1ouji2u00yf8zs15bgm6xh9) since in object oriented programming methods of an object can have side-effects.
-
-Lets start writing the states involved in this problem.
+All the states are represented using class with immutable fields. No behaviour should be associated with state. 
 
 ```java
 class Item {
@@ -45,9 +46,11 @@ class Credit {
 }
 ```
 
-Item represents a menu in the Coffee Shop, PaidItem and UnPaidItem represents the items for which payment was successful and unsuccessful res.., and Credit represents the balance amount which can be used for payment by customer.
+Item represents a menu in the Coffee Shop. 
+PaidItem and UnPaidItem represents the items for which payment was successful and unsuccessful res.., 
+Credit represents the balance amount which can be used for payment.
 
-These states are good enough at this moment. Before we implement our use-case, lets get our basics right.
+Before we implement our use-case, lets get our basics right.
 
 We are going to see fold function which is used to implement almost all API's in this blog post. fold is similar to iterate method we have seen in this  [post](https://senthilganesh.hashnode.dev/array-operations-and-recurrence-in-object-oriented-programming-ck1z3xiop00w19ss1b4kj431n) 
 
@@ -178,7 +181,14 @@ interface CoffeeShop {
 }
 ```
 
-We have used some datatype and functions without explaining them. For functional programming we cannot use datastructures which depends on state mutation. So we need to define new functional data structures to be used for this example. So far we have seen List, Tuple, Either, and Maybe data types. lets see the implementations of these data structures before we can stitch the functions to implement our use-case.
+You might have observed that the data structures we have used here are different from the ones we use from JDK library. For functional programming we cannot use datastructures which depends on state mutation. So we need to define new functional data structures for writing functional code. 
+
+So far we have seen List, Tuple, Either, and Maybe data types. Let’s see the implementations of these data structures before we can stitch the functions to implement our use-case.
+
+# Functional Data-structures
+
+## List
+List is a simple recursive data-structure which has head(which is a value) and a tail (which is another list). Empty represents an empty list. To make the types Cons and Empty substitutable, we are making use of inheritance.
 
 ```java
 
@@ -231,17 +241,15 @@ interface List<T> {
     }
 
     final static class Empty<T> implements List<T> {
-
-        @Override
+       @Override
         public String toString() {
             return "[]";
         }
     }
 }
 ```
-List is a simple recursive data-structure which has head(which is a value) and a tail (which is another list). Empty represents an empty list. To make the types Cons and Empty substitutable, we are making use of inheritance. Functional languages support this via data constructors.
 
-Lets see how we can implement some functional API's to be used with List
+## List Operations
 
 ```java
 
@@ -279,13 +287,11 @@ interface ListOps {
 }
 
 ```
+We are using fold here to implement map, concat, flatMap, filter and apply functions.
 
-foldl method folds the list starting from left to right. It can be defined for other data-structures as well.
+## Either
 
-fold function is same as the iterate function we saw in my earlier  [post](https://senthilganesh.hashnode.dev/array-operations-and-recurrence-in-object-oriented-programming-ck1z3xiop00w19ss1b4kj431n) . The difference between functional and object implementation is that in Object implementation, the Array type encapsulate the array values and expose the iterate method as behavior of the object.
-
-
-Lets see the either datatype which is again used in this  [post](https://senthilganesh.hashnode.dev/exception-handling-object-oriented-way-cjzlbrzw3000wwks1n2909li1).
+Object implement of this data type is used in this  [post](https://senthilganesh.hashnode.dev/exception-handling-object-oriented-way-cjzlbrzw3000wwks1n2909li1). It represents presence of either of values A and B at any point of time.
 
 ```java
 interface Either<A, B> {
@@ -327,7 +333,7 @@ interface Either<A, B> {
 
 ```
 
-Let's implement the same APIs for Either type as well
+## Either Operations
 
 ```java
 interface EitherOps {
@@ -356,7 +362,7 @@ interface EitherOps {
 }
 ``` 
 
-Below are the APIs written for Maybe and Tuple data types.
+## Maybe
 
 ```java
 interface Maybe<T> {
@@ -398,6 +404,9 @@ interface Maybe<T> {
         }
     }
 }
+
+## Maybe Operations
+```java
 interface MaybeOps {
     static <T, R> R foldl (final BiFunction<R,T,R> accum, final R seed, final Maybe<T> maybe) {
         if (maybe == Maybe.NOTHING)
@@ -421,7 +430,10 @@ interface MaybeOps {
         return p.test(Maybe.unsafe(maybe)) ? maybe : Maybe.nothing();                
     }
 }
+```
+## Tuple
 
+```java
 class Tuple<A, B> {
     public final B _2;
     public final A _1;
@@ -436,7 +448,10 @@ class Tuple<A, B> {
         return "(" + _1 + "," + _2 + ")";
     }
 }
+```
+##Tuple operations
 
+```java
 interface TupleOps {
     
     static <T, R> Tuple<List<T>, List<R>> fromList (final List<Tuple<T, R>> list) {
@@ -459,10 +474,9 @@ Generics is originally a concept in functional paradigm and object oriented para
 
 Since we cannot have such parameterization in JAVA, we cannot generalize these methods. This is serious limitation with JAVA in supporting functional programming. Having lamda (syntactic sugar for anonymous object) and functional interfaces (single behavior objects) doesn't help one to write functional code in JAVA.
 
-Functional languages address this by allowing parameterization of data-structure itself. For Example in Haskell, the types which support map functions are called Functors. Any datastructure can provide instance for Functor typeclass and get all API's which takes functor instance as input for free.
-
 Since we spoke about all functions being referentially transparent, reading and writing of values from/to the console which is a side effect should also be represented as pure functions. This is an issue since they are clearly side-effects and how to reason with them in referrentially transparent way?. Lets see IO and IOOps implementation to get it clear.
 
+## Side-effect free Input and Output functions
 
 ```java
 
@@ -557,13 +571,11 @@ public static void main(String[] args) {
 }
 ```
 
-We need to print one message to the console and read two inputs (name and quantity) from the console. These operations are side-effects but thanks to IO<T> we can return IO<String> , IO<Integer> and IO<Void> for reading string and integer and writing string to console res.., These objects won't perform the side-effect (reading / writing) untill the unsafeIO method is called on them. 
+We are composing multiple IOOps functions here to perform input and output operations. The readString function returning IO<String> object can take the logic which depends on input string read from console without actually performing the read operation. Thus IO<String>::flatMap is pure function. We can compose any number of IO functions and logic depending on input and output using the flatMap and the code is still pure. 
 
-Since we can compose the code using the flatMap () abstraction, we can ingest the code which depends on these inputs to the inner most flatMap method.
+The actual input and output operations are performed only when we call unsafeIO() function. This call can be postponed thanks to function composition. The unsafeIO() needs to be called only once and all the effects are applied in the order in which the code was composed.
 
-The call to unsafeIO() needs to be called only once and all the effects are applied in the order in which the code was composed.
-
-Now we call the method order with the inputs specified by user and get the ordered items. Next by mapping each ordered item using bill method, we get list of functions taking credit returning tuple of updated credit and either paid or unpaid item.
+Our use-case starts with placing an order by specifying the name and quantity to order function which returns the ordered items list and updated store. Next by mapping each ordered item using bill method, we get list of functions taking credit returning updated credit and either paid or unpaid item.
 
 We need to apply the functions to credit object and get the results in another list. Now we need to extract the paid and unpaid items. For all unpaid items, we need to call shelve to return it back to the store. The output can be printed to console using IOOps.print() function.
 
@@ -597,7 +609,9 @@ Tuple<ArrayList<Item>, ArrayList<Item>> orderedItems =
         }, 
         (l1, l2) -> l2);
 ```
-This is clearly an improvement over imperative coding using for loop and state mutation. But the better way to code in Java is to define objects encapsulating state and expose well defined behavior.
+This is clearly an improvement over imperative coding using for loop and state mutation. But the better way to code in Java is to define objects encapsulating state and expose well defined behaviour.
+
+# Object oriented Implementation
 
 ```java
 
@@ -626,7 +640,11 @@ interface PaidItem {
 interface UnPaidItem {
     void revert (final Inventory inv);
 }
+```
 
+And the Consumer logic is ...
+
+```java
 inventory.order("Mocha", 1).bill(credit)
 .ifSuccess (PaidItem::checkOut)
 .ifFailure(up -> up.revert(inventory));
@@ -634,14 +652,15 @@ inventory.order("Mocha", 1).bill(credit)
 ```
 We can understand the code very easily by looking at the object interaction without paying attention to the implementation details. 
 
-Functional programming is easier in languages where First Class Functions, TypeClass parameterization, Lazy evaluation, pattern matching, syntactic sugar for chaining map and flatMap APIs (Example Haskell do Notation, for comprehension in scala), Higher kinded types and many other functional features are present. In all other languages (like CPP and JAVA) its just an overkill.
-
-Pure object oriented code is both concise and easy to understand and any complexity with respect to state mutation is confined within the premise of an object (Thanks to encapsulation). 
+Functional programming is easier in languages where First Class Functions, TypeClass parameterization, Lazy evaluation, pattern matching, syntactic sugar for chaining map and flatMap APIs (Example Haskell do Notation, for comprehension in scala), Higher kinded types and many other functional features are present. In all other languages (like CPP and JAVA) its just an overkill. 
 
 In this post we might have observed that functional programming revolves around values. There is no concept of encapsulation. They depend on pure functions and values instead of dealing with variables and state mutation to solve the problem.
 
-Object oriented programming confine the variables and effects within the premise of an object whereas functional programming eliminates them (refer IOOps). Both address the complexity due to variables and effects but follows different approach. 
+Pure object oriented code is both concise and easy to understand and any complexity with respect to state mutation is confined within the premise of an object (Thanks to encapsulation). Object oriented programming confine the variables and effects within the premise of an object whereas functional programming eliminates them (refer IOOps). Both address the complexity due to variables and effects but follows different approach. 
 
-Intermixing both the styles in single application is an abomination and it will violate the principles on one paradigm if we choose another. In this post we broke encapsulation in every class we have defined to adopt functional style. Pure object oriented code doesn’t return values and functional programming is all about coding around values.
+Intermixing both the styles in single application is an abomination and it will violate the principles of one paradigm when we choose another. In this post we broke encapsulation in every class we have defined to adopt functional style. Pure object oriented code doesn’t return values and functional programming is all about coding around values. 
+
+There are definitely many ideas we can borrow from functional world but should implement them in pure object oriented fashion to use in JAVA. Examples are Maybe for 
+null handling, Either for exception handling, fold for iteration, and so on.
 
 If anyone has any comments about the blog contents, please feel free to comment below.
