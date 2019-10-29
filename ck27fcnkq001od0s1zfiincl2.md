@@ -81,11 +81,7 @@ This is normal iteration we do in our day to day programming. The logic to inclu
 For example if we wanted to filter the list based on some predicate then, we can write the filter function using the fold as follows:
 
 ```java
-List<T> filter (final Predicate<T> pred, final List<T> list) {
-    return fold ( (ts, t) -> pred.test(t) ? List.cons(t, ts) : ts, List.empty(), list);
-}
-
-//Lets understand the imperative version of above filter implementation.
+//imperative version.
 List<T> filter (final Predicate <T> pred, final List<T> list) {
     List<T> start = List.empty(); //start with empty list
     for (T i : list) {
@@ -94,6 +90,10 @@ List<T> filter (final Predicate <T> pred, final List<T> list) {
         } /*else dont include the ith value to the list.*/
     }
     return start;
+}
+
+List<T> filter (final Predicate<T> pred, final List<T> list) {
+    return fold ( (ts, t) -> pred.test(t) ? List.cons(t, ts) : ts, List.empty(), list);
 }
 
 ```
@@ -404,6 +404,7 @@ interface Maybe<T> {
         }
     }
 }
+```
 
 ## Maybe Operations
 ```java
@@ -449,7 +450,7 @@ class Tuple<A, B> {
     }
 }
 ```
-##Tuple operations
+## Tuple operations
 
 ```java
 interface TupleOps {
@@ -468,15 +469,9 @@ interface TupleOps {
 }
 ```
 
-Do we see the issue here? We are repeating the specification of same functions foldl, map, flatmap for every datatypes. These functions are very generic that they can be implemented for variety of data-structures. How can we generalize them in Object oriented programming. Short answer we can't.
-
-Generics is originally a concept in functional paradigm and object oriented paradigm borrowed this concept for implementing generic data-structures. (Remember data-structures are not objects). What we have here is some way to parameterize the data-structure (such as list, maybe, tree) in-addition to parameterizing the type of value the data-structure used to represent.
-
-Since we cannot have such parameterization in JAVA, we cannot generalize these methods. This is serious limitation with JAVA in supporting functional programming. Having lamda (syntactic sugar for anonymous object) and functional interfaces (single behavior objects) doesn't help one to write functional code in JAVA.
+## Side-effect free Input and Output functions
 
 Since we spoke about all functions being referentially transparent, reading and writing of values from/to the console which is a side effect should also be represented as pure functions. This is an issue since they are clearly side-effects and how to reason with them in referrentially transparent way?. Lets see IO and IOOps implementation to get it clear.
-
-## Side-effect free Input and Output functions
 
 ```java
 
@@ -579,37 +574,15 @@ Our use-case starts with placing an order by specifying the name and quantity to
 
 We need to apply the functions to credit object and get the results in another list. Now we need to extract the paid and unpaid items. For all unpaid items, we need to call shelve to return it back to the store. The output can be printed to console using IOOps.print() function.
 
-Now if we look at the main method, the code is very verbose. Its because JAVA language is very verbose for functional programming and more than that it lacks the generalization capabilities to avoid code repetition. The same code written in functional languages like haskell would be much more concise and clear. 
+## Functional Program is verbose in JAVA
 
-One of the good things about this code is the fold method which fuels most of the functional APIs. It can be used in object oriented programming as well for iteration. Any imperative code involving for loops on collections can be represented using fold operation. 
+Now if we look at the main method, the code is very verbose. Its because JAVA language is very verbose for functional programming. We are repeating the specification of same functions foldl, map, flatmap for every datatypes. These functions are very generic that they can be implemented for variety of data-structures. How can we generalize them in Object oriented programming. Short answer we can't.
 
-JAVA streams has reduce API which is nothing but a fold method. Any imperative code involving for-loop on collections can be refactored using this reduce method.
-For Example the order function we saw earlier in this blog can be written using reduce API of stream as follows:
+Generics is originally a concept in functional paradigm. object oriented paradigm borrowed this concept for implementing generic data-structures. (Remember data-structures are not objects). What we have here is some way to parameterize the data-structure (such as list, maybe, tree) in-addition to parameterizing the type of value the data-structure used to represent.
 
-```java
+Since we cannot have such parameterization in JAVA, we cannot generalize these methods. This is serious limitation with JAVA in supporting functional programming. Having lamda (syntactic sugar for anonymous object) and functional interfaces (single behavior objects) doesn't help one to write functional code in JAVA.
 
-Tuple<ArrayList<Item>, ArrayList<Item>> orderedItems = 
-        Arrays.asList(items).stream()
-        .reduce(
-            new Tuple<>(new ArrayList<Item>(), new ArrayList<Item>()),
-            (tis, item) -> {
-                if (item.qty > qty && item.name.equalsIgnoreCase(name)) {
-                    ArrayList<Item> left = new ArrayList<>(tis._1);
-                    ArrayList<Item> right = new ArrayList<>(tis._2);
-
-                    left.add (new Item (item.name, item.price, qty));
-                    right.add (new Item (item.name, item.price, item.qty - qty));
-
-                    return new Tuple<>(left, right);
-                } else {
-                    ArrayList<Item> right= new ArrayList<>(tis._2);
-                     right.add(item);
-                     return new Tuple<>(tis._1, right);                    
-                }
-        }, 
-        (l1, l2) -> l2);
-```
-This is clearly an improvement over imperative coding using for loop and state mutation. But the better way to code in Java is to define objects encapsulating state and expose well defined behaviour.
+We have to write lots of code to do functional programming in the right way in JAVA. But that doesn’t stop one from writing functional code. But where do we draw the line separating functional and object oriented code in languages like Java? Lets see an object implementation of the same use-case before answering that question.
 
 # Object oriented Implementation
 
