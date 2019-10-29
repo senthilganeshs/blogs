@@ -6,10 +6,10 @@ CoffeeShop has a menu of different varieties of coffee. There is fixed limit of 
 
 In Functional programming, there is no notion of Object. So we are going to follow below conventions in this blog post
 
-# Class will be used to represent state and all states are immutable. 
-# Interfaces are used as namespace for functions for clarity. 
-# When a datatype has different constructors (this constructor is very different from the one we see in object oriented code) we use interface for substitution. 
-# All functions should be referentially transparent. Referentially transparent functions are ones which doesn't have side-effect and returns the same result for given inputs when involved any number of times.
+- Class will be used to represent state and all states are immutable. 
+- Interfaces are used as namespace for functions for clarity. 
+- When a datatype has different constructors (this constructor is very different from the one we see in object oriented code) we use interface for substitution. 
+- All functions should be referentially transparent. Referentially transparent functions are ones which doesn't have side-effect and returns the same result for given inputs when involved any number of times.
 
 With the above guidelines let’s start writing functional code in JAVA
 
