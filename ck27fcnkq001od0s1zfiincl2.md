@@ -572,11 +572,11 @@ Our use-case starts with placing an order by specifying the name and quantity to
 
 We need to apply the functions to credit object and get the results in another list. Now we need to extract the paid and unpaid items. For all unpaid items, we need to call shelve to return it back to the store. The output can be printed to console using IOOps.print() function.
 
-## Functional Program is verbose in JAVA
+## Functional Programming in JAVA is verbose
 
 Now if we look at the main method, the code is very verbose. Its because JAVA language is very verbose for functional programming. We are repeating the specification of same functions foldl, map, flatmap for every datatypes. These functions are very generic that they can be implemented for variety of data-structures. How can we generalize them in Object oriented programming. Short answer we can't.
 
-Generics is originally a concept in functional paradigm. object oriented paradigm borrowed this concept for implementing generic data-structures. (Remember data-structures are not objects). What we have here is some way to parameterize the data-structure (such as list, maybe, tree) in-addition to parameterizing the type of value the data-structure used to represent.
+Generics is originally a concept in functional paradigm. object oriented paradigm borrowed this concept for implementing generic data-structures. (Remember data-structures are not objects). What we need here is some way to parameterize the data-structure itself (such as list, maybe, tree) in-addition to parameterizing the type of value the data-structure used to represent.
 
 Since we cannot have such parameterization in JAVA, we cannot generalize these methods. This is serious limitation with JAVA in supporting functional programming. Having lamda (syntactic sugar for anonymous object) and functional interfaces (single behavior objects) doesn't help one to write functional code in JAVA.
 
@@ -623,15 +623,15 @@ inventory.order("Mocha", 1).bill(credit)
 ```
 Pure object oriented code is both concise and easy to understand and any complexity with respect to state mutation is confined within the premise of an object (Thanks to encapsulation). 
 
-We can understand the code very easily by looking at the object interaction without paying attention to the implementation details. 
-
-Functional programming is easier in languages where First Class Functions, TypeClass parameterization, Lazy evaluation, pattern matching, syntactic sugar for chaining map and flatMap APIs (Example Haskell do Notation, for comprehension in scala), Higher kinded types and many other functional features are present. In all other languages (like CPP and JAVA) its just an overkill. 
+We can understand the code very easily by looking at the object interaction without paying attention to the implementation details.
 
 In this post we might have observed that functional programming revolves around values. There is no concept of encapsulation. They depend on pure functions and values instead of dealing with variables and state mutation to solve the problem.
 
 Object oriented programming confine the variables and effects within the premise of an object while functional programming eliminates them (refer IOOps). Both address the complexity due to variables and effects but follows different approach. 
 
 Intermixing both the styles in single application is an abomination and it will violate the principles of one paradigm when we choose another. In this post we broke encapsulation in every class we have defined to adopt functional style. Pure object oriented code doesn’t return values and functional programming is all about coding around values. 
+
+Functional programming is easier in languages where First Class Functions, TypeClass parameterization, Lazy evaluation, pattern matching, syntactic sugar for chaining map and flatMap APIs (Example Haskell do Notation, for comprehension in scala), Higher kinded types and many other functional features are present. In all other languages (like CPP and JAVA) its just an overkill. 
 
 There are definitely many ideas we can borrow from functional world but should implement them in pure object oriented fashion to use in JAVA. Examples are Maybe for 
 null handling, Either for exception handling, fold for iteration, and so on.
