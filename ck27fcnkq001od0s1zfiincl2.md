@@ -623,13 +623,15 @@ inventory.order("Mocha", 1).bill(credit)
 .ifFailure(up -> up.revert(inventory));
        
 ```
+Pure object oriented code is both concise and easy to understand and any complexity with respect to state mutation is confined within the premise of an object (Thanks to encapsulation). 
+
 We can understand the code very easily by looking at the object interaction without paying attention to the implementation details. 
 
 Functional programming is easier in languages where First Class Functions, TypeClass parameterization, Lazy evaluation, pattern matching, syntactic sugar for chaining map and flatMap APIs (Example Haskell do Notation, for comprehension in scala), Higher kinded types and many other functional features are present. In all other languages (like CPP and JAVA) its just an overkill. 
 
 In this post we might have observed that functional programming revolves around values. There is no concept of encapsulation. They depend on pure functions and values instead of dealing with variables and state mutation to solve the problem.
 
-Pure object oriented code is both concise and easy to understand and any complexity with respect to state mutation is confined within the premise of an object (Thanks to encapsulation). Object oriented programming confine the variables and effects within the premise of an object whereas functional programming eliminates them (refer IOOps). Both address the complexity due to variables and effects but follows different approach. 
+Object oriented programming confine the variables and effects within the premise of an object while functional programming eliminates them (refer IOOps). Both address the complexity due to variables and effects but follows different approach. 
 
 Intermixing both the styles in single application is an abomination and it will violate the principles of one paradigm when we choose another. In this post we broke encapsulation in every class we have defined to adopt functional style. Pure object oriented code doesn’t return values and functional programming is all about coding around values. 
 
