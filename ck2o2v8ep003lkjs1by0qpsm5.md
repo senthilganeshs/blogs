@@ -4,7 +4,7 @@ This is in continuation with my previous post [Functional Programming in JAVA](h
 
 But with functional programming we get lots of APIs for free by implementing very few functions. For Example, a data-structure implementing foldr function can get isNull, length, elem, maximum, minimum, sum, product, etc.., for free. This is very useful for any programming paradigm.
 
-Let's explore how we can get this done in object oriented languages without compromising its principles.
+Losing those capabilities in object oriented paradigm will be a loss. We need to understand how to transform these functional concepts into object oriented coding without violating its principles. 
 
 Data-structures in functional languages allows one to pattern match the shape of the datatype (internal state). The functional data-structures are persistent data-structures which needs to construct and de-construct the data-types for any operation involving modifications. If we know the shape of the data-type and constructor to invoke, we can construct data-types on the fly.
 
@@ -65,9 +65,9 @@ We iterate the data-structure and specify the start value as empty(). We build t
 
 ```java
 default <R> Iterable<R> map (final Function<T, R> fn) {
-    return foldRight (
+    return foldLeft (
         empty(),
-        (t, rs) -> rs.build(fn.apply(t)));
+        (rs, t) -> rs.build(fn.apply(t)));
 }
 ```
 Map is similar to filter implementation except that it applies function fn to each value in the data-structure and construct a new one.
@@ -81,7 +81,7 @@ concat passes first as seed so all values in the current data-structure is added
 
 ```java
 default <R> Iterable<R> flatMap (final Function<T, Iterable<R>> fn) {
-    return foldRight (
+    return foldLeft (
         empty(),
         (rs, t) -> fn.apply(t).concat(rs));
 }
@@ -130,8 +130,8 @@ default <R> Iterable<Iterable<R>> traverse (
     Iterable<Iterable<R>> seed = empty();
     Iterable<Iterable<R>> sseed = seed.build(empty());
        
-    return foldRight (sseed, 
-                (t, rrs) -> 
+    return foldLeft (sseed, 
+                (rrs, t) -> 
                 fn.apply(t).liftA2((r,  rs) -> rs.build(r), rrs));
 }
 ```
@@ -203,7 +203,7 @@ final static class ListIterable<T> implements List<T> {
     @Override
     public Iterable<T> build(T input) {
         java.util.List<T> newList = new ArrayList<>(list);
-        newList.add(0, input);
+        newList.add(input);
         return new ListIterable<>(newList);
     }
 
