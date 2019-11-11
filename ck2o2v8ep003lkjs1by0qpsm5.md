@@ -243,4 +243,6 @@ We still have objects modelling our use-case but we have eliminated the imperati
 
 This code is still object oriented even though it uses functional data-structures and functional API's. They are all used in the context of avoiding imperative coding involving loops, recursion, variable assignments, etc.., rather than modelling the problem itself.
 
+You can find the github project implementing functional apis  [here](https://github.com/senthilganeshs/functional-java) 
+
 Please leave your comments below. Happy Coding. !!!
