@@ -225,14 +225,14 @@ inventory.order("Mocha", 1).bill(credit)
 .ifFailure(up -> up.revert(inventory));
 ```
 
-Now lets say we wanted to order multiple servings of different Coffee, then we can write as follows :
+Now lets say we wanted to order one serving of different Coffee, then we can write as follows :
 
 ```java
 List.of("Mocha", "Espresso", "Latte") //list of coffees
     .liftA2(
         //combine two lists into list of orders
         (item, qty) -> inventory.order(item, qty), 
-        List.of(1,2,1)) //number of servings
+        List.of(1)) //one serving of each coffee.
     .forEach(
         order -> 
             order.bill(credit)
