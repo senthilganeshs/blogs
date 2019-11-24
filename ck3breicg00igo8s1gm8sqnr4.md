@@ -191,6 +191,6 @@ To summarize we have identified below constraints while implementing the use-cas
 - Each use-case should contain only objects and its interactions.
 - Each object should accompany unit tests verifying its behavior.
 
-Should every object oriented system follow above constraints always.? Need not be.. It largely depends on the domain knowledge and ability to forecast the possibile changes the software will go through. Do we need to follow this exercise everywhere in the code? That would be ideal but wherever we expect the changes to happen, it becomes essential.
+Should every object oriented system follow above constraints always.? Need not be.. It largely depends on the domain knowledge and ability to forecast the possibile changes the software will go through. Do we need to follow this exercise everywhere in the code? That would be ideal but in places where we expect the changes to happen, it becomes essential.
 
 For Example, an enterprise application which followed strict object-oriented programming principles for its infrastructure will make the infrastructure substitutable. This means that the same application which runs in one environment can be ported to another environment easily without impacting its domain logic.
