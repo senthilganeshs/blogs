@@ -6,7 +6,7 @@ Consider someone (a novice developer) solving a problem using object-oriented co
 
 > So how do we identify the right path from the wrong ones.? 
 
-If we have constraints which helps us choose one design decision over the other, we can narrow down the choices quite easily.
+If we have constraints which helps us choose one design over the other, we can narrow down the choices quite easily.
 
 In this blog post, we will identify few constraints which helps us write successful software.
 
@@ -25,14 +25,6 @@ How do we deliver the changes within reasonable time-frame?
 - We can deliver the changes with confidence to the consumer only if we have (automated) tests which ensure its correctness. (Maintainability)
 
 Still the terms are more abstract and we need to find ways to relate them in coding. We need to find what aspects of object-oriented programming can relate to these terms and what design choices we must take to maximize these attributes.?
-
-> How to code an object which accommodates changes easily?
-
-Objects encapsulate state and expose behavior. State is any input we pass to the constructor which creates the object. If the state of the object is substitutable then we can alter the behavior of the object easily.
-
-In Object oriented programming we use interface to allow substitution. If the object and its state (constructor argument) is coded to its interface then the object is extensible.
-
-If all the objects used to implement the use-case is extensible then the use-case becomes extensible.
 
 > How to code an object which is readable?
 
@@ -70,6 +62,120 @@ The method "read" in the context of "book"  represents furnishing the content of
 The method "learn" in the context of "reader" represents consumption of contents of the book.
 
 This code is readable since we have got right words used in the right context.
+
+> How to code an object which accommodates changes easily?
+
+In Object oriented programming we use interface to allow substitution. If the object is coded to its interface then it can be replaced with another implementation. The code which depends on an interface for behavior is extensible since we can substitute any implementation to it.
+
+If the use-case is implemented only using objects and its interaction with other objects, then the use-case itself becomes extensible.
+
+Let's write pseudo implementation of the above interfaces to analyze the extensibility of our design.
+
+```java
+readFromBookUseCase() {
+    library.book ("978-3-16-148410-0").read (reader);
+}
+library (isbnToBooksMap) {
+    Book book (final String isbn) {
+        return isbnToBooksMap.get(isbn);
+    }
+}
+book (contents) {
+    void read (Reader reader) {
+        contents.forEach (text -> reader.learn (text));
+    }
+}
+reader() {
+    void learn (final String text) {
+        System.out.println ("Learning "+ text);
+    }
+}
+```
+The behavior "book" depends on string attribute ("isbn") which makes the behavior difficult to extend. But Library object is extensible and hence can have different implementations. Library object which finds book by author, title, or by any other parameter can be separate implementations of Library interface. 
+
+We are still tied to the fact that the locator is a "String" attribute which is primitive. But if we know the parameters to lookup a book can always be represented as a "String" then we are good. 
+
+The behavior "learn" in the Reader object again depends on primitive "String" for the content. If we get new use-case to support learning from images, tables, or charts then we will be in trouble. Let's fix that by changing the "String" argument to Content object.
+
+```java
+interface Reader {
+    void learn(final Content content);
+}
+```
+Now what behavior we should add to the Content type we have invented? The existing implementation of the "Reader" object gives us the clue. The old implementation prints the text to the console. Let's add that as a behavior to the Content object.
+
+```java 
+interface Content {
+    void print (final OutputStream os);
+}
+textContent (final String text) {
+    void print (final OutputStream os) {
+        os.write (text);
+    }
+}
+tableContent (final String[] header, final String[] rows) {
+    void print (final OutputStream os) {
+        // print header and rows.
+    }
+}
+reader (final OutputStream os) {
+    void learn (final Content content) {
+        content.print (os);
+    }
+}
+```
+We can now see that the reader object is decoupled from knowing the details of book contents. We can now easily support the use-case of having "text", "image", "table" or "charts" content within the same book and can be interpretted by the same reader object. The knowledge of interpretting the content is confined within the content object.
+
+Let's see final re-write of all the interfaces and pseudo-implementations.
+
+```java
+interface Library {
+    Book book (final String locator);
+}
+interface Book {
+    void read (final Reader reader);
+}
+interface Reader {
+    void learn (final Content content);
+}
+interface Content {
+    void print (final OutputStream os);
+}
+
+isbnLibrary (isbnToBookMap) {
+    Book book (String isbn) {
+        return isbnToBookMap.get(isbn);
+    }
+}
+storyBook (contents) {
+    void read (final Reader reader) {
+        contents.forEach (content -> reader.learn(content));
+    }
+}
+textContent (text) {
+    void print (final OutputStream os) {
+        os.write (text);
+    }
+}
+tableContent (header, rows) {
+    void print (final OutputStream os) {
+        // print header and rows.
+    }
+}
+bookReader (OutputStream os) {
+    void learn (final Content content) {
+        content.print (os);
+    }
+}
+```
+
+We have seen how our original design was difficult to extend when
+- We want to look-up book by different parameters apart from isbn.
+- We want to learn different contents such as text, tables, charts, etc..,
+
+We chose multiple library implementations for lookup by different parameters since we assumed that look-up field is always "string" and we went with creating new type (Content) to deal with different contents.
+
+We also noticed that the code becomes more extensible when we identify new objects in-place of non-objects (primitives and data-structures).
 
 > How to code an object which is maintainable?
 
