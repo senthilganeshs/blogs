@@ -44,7 +44,7 @@ interface Library {
     Book book (final String isbn);
 }
 interface Book {
-    void read (final Reader reader)
+    void read (final Reader reader);
 }
 interface Reader {
     void learn (final String text);
@@ -68,7 +68,7 @@ This code is readable since we have got right words used in the right context.
 
 > How to code an object which accommodates changes easily?
 
-In Object oriented programming we use interface to allow substitution. If the object is coded to its interface then it can be replaced with another implementation. The code which depends on an interface for behavior is extensible since we can substitute any implementation to it.
+In object-oriented programming we use interface to allow substitution. If the object is coded to its interface then it can be replaced with another implementation. The code which depends on an interface for behavior is extensible since we can substitute any implementation to it.
 
 If the use-case is implemented only using objects and its interaction with other objects, then the use-case itself becomes extensible.
 
@@ -94,6 +94,9 @@ reader() {
     }
 }
 ```
+
+All the objects are coded against an interface and hence all of them are replaceable. So we will turn our attention towards the behaviors defined within those interface(s).
+
 The behavior "book" depends on string attribute ("isbn") which makes the behavior difficult to extend. But Library object is extensible and hence can have different implementations. Library object which finds book by author, title, or by any other parameter can be separate implementations of Library interface. 
 
 We are still tied to the fact that the locator is a "String" attribute which is primitive. But if we know the parameters to lookup a book can always be represented as a "String" then we are good. 
@@ -171,14 +174,7 @@ bookReader (OutputStream os) {
     }
 }
 ```
-
-We have seen how our original design was difficult to extend when
-- We want to look-up book by different parameters apart from isbn.
-- We want to learn different contents such as text, tables, charts, etc..,
-
-We chose providing separate implementations of library object for each lookup parameter (which is isbn, author, title, and so on) and new object to replace non-object parameter (text) in the "learn" method
-
-We also noticed that the code becomes more extensible when we replace new objects in-place of non-objects (primitives and data-structures).
+Notice that the code becomes more extensible whenever we replace new objects in-place of non-objects (primitives and data-structures). 
 
 > How to code an object which is maintainable?
 
@@ -191,6 +187,10 @@ To summarize we have identified below constraints while implementing the use-cas
 - Each use-case should contain only objects and its interactions.
 - Each object should accompany unit tests verifying its behavior.
 
-Should every object oriented system follow above constraints always.? Need not be.. It largely depends on the domain knowledge and ability to forecast the possibile changes the software will go through. Do we need to follow this exercise everywhere in the code? That would be ideal but in places where we expect the changes to happen, it becomes essential.
+Should every object oriented system follow above constraints always.? Need not be. It largely depends on the domain knowledge and ability to forecast the possibile changes the software will go through. 
+
+Do we need to follow this exercise everywhere in the code? That would be ideal but in places where we expect the changes to happen frequently, it becomes essential.
 
 For Example, an enterprise application which followed strict object-oriented programming principles for its infrastructure will make the infrastructure substitutable. This means that the same application which runs in one environment can be ported to another environment easily without impacting its domain logic.
+
+Please leave your comments / inputs about this blog below.
