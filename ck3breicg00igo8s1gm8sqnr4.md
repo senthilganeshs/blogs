@@ -23,11 +23,9 @@ The initial version of the software which passes its tests for the given use-cas
 - Even if the software is extensible, any new developer responsible for doing the change should be able to understand the existing code easily.(Readability)
 - We can deliver the changes with confidence to the consumer only if we have (automated) tests which ensure its correctness. (Reliabiliy / Maintainability)
 
-The software is exensible if the usecase(s) which the software provides are all extensible. The use-case is extensible if all the objects used to implement the use-case is extensible. 
+The software is extensible if the usecases implemented by the software is extensible. The use-case is extensible if objects used to implement the use-case is extensible. 
 
-Hence we need to understand how an object can be extensible and maintainable in-order to cascade these attributes to the use-cases and then to the software itself.
-
-The rest of the blog discusses how the decisions taken at the object level defines extensibility, readability and maintainability (or reliability) of the software.
+We need to understand how to make an object extensible so that the attribute cascades to the use-cases and then to the software itself.
 
 > How to code an object which is readable?
 
@@ -187,10 +185,7 @@ To summarize we have identified below constraints while implementing the use-cas
 - Each use-case should contain only objects and its interactions.
 - Each object should accompany unit tests verifying its behavior.
 
-Should every object oriented system follow above constraints always.? Need not be. It largely depends on the domain knowledge and ability to forecast the possibile changes the software will go through. 
+Extensibility and readability are important attributes of any successful software. Whenever we find object or behavior depending on non-objects and we want to extend such objects for change in behavior, we can try replacing the non-objects with objects like we did in this example. 
 
-Do we need to follow this exercise everywhere in the code? That would be ideal but in places where we expect the changes to happen frequently, it becomes essential.
-
-For Example, an enterprise application which followed strict object-oriented programming principles for its infrastructure will make the infrastructure substitutable. This means that the same application which runs in one environment can be ported to another environment easily without impacting its domain logic.
 
 Please leave your comments / inputs about this blog below.
